@@ -11,7 +11,7 @@ export default function MaskReveal() {
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       // Staggered reveal of items with mask effect
-      itemsRef.current.forEach((item, index) => {
+      itemsRef.current.forEach((item) => {
         gsap.from(item, {
           clipPath: 'inset(0 100% 0 0)',
           duration: 1.5,
