@@ -1,59 +1,93 @@
-import { useRef, useLayoutEffect } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Link } from '@inertiajs/react';
+import { useAtom } from 'jotai';
+import { BsTwitterX } from 'react-icons/bs';
+import { FaFacebook, FaLinkedinIn } from 'react-icons/fa6';
+import { LuInstagram } from 'react-icons/lu';
 
-gsap.registerPlugin(ScrollTrigger);
+import { servicesAtom } from '../atoms/atoms';
+import MotionFrame from './MotionFrame';
+import award1 from '../assets/awards/award1.png';
+import award2 from '../assets/awards/award2.png';
+import award3 from '../assets/awards/award3.png';
+import award4 from '../assets/awards/award4.png';
+import award5 from '../assets/awards/award5.png';
+import award6 from '../assets/awards/award6.png';
+import award7 from '../assets/awards/award7.png';
+import award8 from '../assets/awards/award8.png';
 
-export default function Footer() {
-  const footerRef = useRef(null);
-  const contentRef = useRef(null);
 
-  useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(contentRef.current, {
-        opacity: 0,
-        y: 50,
-        duration: 1,
-        scrollTrigger: {
-          trigger: footerRef.current,
-          start: 'top 80%',
-          end: 'top 50%',
-          scrub: 1,
-        },
-      });
-    }, footerRef);
+function Footer() {
+    const awardLogos = [award1, award2, award3, award4, award5, award6, award7, award8];
+    const [services] = useAtom(servicesAtom);
+    return (
+        <footer className="bg-[#011936] px-6 py-12 text-white">
+            <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[2.2fr_0.9fr_0.9fr]">
+                {/* Brand & Awards */}
+                <MotionFrame direction="left">
+                    <div>
+                        <h2 className="mb-15 text-3xl font-semibold">pureminds</h2>
+                        <p className="mb-6 text-sm">We Win Awards And Get Recognized For</p>
+                        <div className="mb-15 flex flex-wrap gap-3">
+                            {awardLogos.map((src, idx) => (
+                                <img key={idx} src={src} alt={`Award logo ${idx + 1}`} className="h-12 object-contain" />
+                            ))}
+                        </div>
+                        <p className="text-xs text-gray-400">© 2025 PureMinds. All Rights Reserved</p>
+                    </div>
+                </MotionFrame>
+                {/* Services */}
+                <MotionFrame direction="right">
+                    <div>
+                        <h3 className="mb-4 text-xl font-light uppercase">Our Service</h3>
+                        <ul className="space-y-2 text-sm">
+                            {services.map((svc, i) => (
+                                <li key={i}>
+                                    <Link href={`/service/${svc.id}`}>{svc.name}</Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </MotionFrame>
 
-    return () => ctx.revert();
-  }, []);
+                {/* Contact & Social */}
+                <MotionFrame direction="right">
+                    <div className="flex h-full flex-col justify-between space-y-8">
+                        <div>
+                            <h3 className="mb-4 text-xl font-light uppercase">Get In Touch</h3>
+                            <p className="text-sm">123456789</p>
 
-  return (
-    <footer
-      ref={footerRef}
-      className="relative min-h-screen flex items-center justify-center bg-neutral-950"
-    >
-      <div ref={contentRef} className="text-center px-6">
-        <h2
-          className="text-6xl md:text-9xl mb-8 text-white"
-          style={{ fontWeight: 100 }}
-        >
-          Let's Create Together
-        </h2>
-        <p
-          className="text-2xl md:text-3xl text-neutral-400 mb-12"
-          style={{ fontWeight: 100 }}
-        >
-          Transform your vision into reality
-        </p>
-        <button
-          className="px-12 py-4 text-xl border border-white text-white hover:bg-white hover:text-black transition-all duration-300"
-          style={{ fontWeight: 100 }}
-        >
-          Get in Touch
-        </button>
-        <div className="mt-20 text-neutral-600 text-sm">
-          <p style={{ fontWeight: 100 }}>© 2026 Pureminds. All rights reserved.</p>
-        </div>
-      </div>
-    </footer>
-  );
+                            <p className="text-sm">hello@puremines.com</p>
+                            <p className="text-sm">Saudi, Riyadh</p>
+                        </div>
+
+                        <div>
+                            <h3 className="mb-4 text-xl font-light uppercase">Follow Us</h3>
+                            <div className="flex gap-6 text-2xl">
+                                <a href="https://www.facebook.com/puremindsksa" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                                    <FaFacebook className="text-blue-400 transition-colors duration-200 hover:text-blue-500" />
+                                </a>
+                                <a href="https://x.com/puremindsksa" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+                                    <BsTwitterX className="text-blue-400 transition-colors duration-200 hover:text-black" />
+                                </a>
+                                <a href="https://www.instagram.com/puremindsksa" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                                    <LuInstagram className="text-blue-400 transition-colors duration-200 hover:text-pink-700" />
+                                </a>
+
+                                <a
+                                    href="https://sa.linkedin.com/company/pureminds-agency"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label="LinkedIn"
+                                >
+                                    <FaLinkedinIn className="text-blue-400 transition-colors duration-200 hover:text-blue-900" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </MotionFrame>
+            </div>
+        </footer>
+    );
 }
+
+export default Footer;
