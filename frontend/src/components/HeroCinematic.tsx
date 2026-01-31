@@ -7,109 +7,109 @@ import logo from "../assets/pureminds-logo.png";
 gsap.registerPlugin(ScrollTrigger);
 
 const HeroCinematic = () => {
-  const mainContainer = useRef<HTMLDivElement | null>(null);
-  const videoSection = useRef<HTMLDivElement | null>(null);
-  const overlaySection = useRef<HTMLDivElement | null>(null);
-  const videoElement = useRef<HTMLVideoElement | null>(null);
+  const wrapperRef = useRef<HTMLElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const overlayRef = useRef<HTMLDivElement | null>(null);
+  const phraseOneRef = useRef<HTMLParagraphElement | null>(null);
+  const phraseTwoRef = useRef<HTMLParagraphElement | null>(null);
+  const logoRef = useRef<HTMLImageElement | null>(null);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      // 1. Initial Load: Scale down video from 1.1 to 1.0
+      // Hero A: Scale video from 1.1 to 1.0 on mount
       gsap.fromTo(
-        videoElement.current,
+        videoRef.current,
         { scale: 1.1 },
-        { scale: 1, duration: 2, ease: "power2.out" },
+        { scale: 1, duration: 1.5, ease: "power2.out" },
       );
 
-      // 2. Master Timeline: Pinning and Transition
+      // Pin and transition timeline - UNPINS after transition
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: mainContainer.current,
+          trigger: wrapperRef.current,
           start: "top top",
-          end: "+=150%", // Enough room for weighted scroll
+          end: "+=200%",
+          scrub: 1,
           pin: true,
-          scrub: 1.2, // Adds premium kinetic weight
         },
       });
 
-      tl.to(overlaySection.current, {
-        yPercent: -100, // Slides UP to cover the video
-        ease: "none",
-      }).to(
-        ".reveal-line",
-        {
-          yPercent: -100, // Reveals masked text
-          stagger: 0.2,
-          duration: 1,
-          ease: "power3.out",
-        },
-        "-=0.5",
-      ); // Starts while section is sliding
-    }, mainContainer);
+      // Hero B slides up
+      tl.fromTo(
+        overlayRef.current,
+        { yPercent: 100 },
+        { yPercent: 0, duration: 1, ease: "none" },
+      )
+        .fromTo(
+          phraseOneRef.current,
+          { yPercent: 100, opacity: 0 },
+          { yPercent: 0, opacity: 1, duration: 0.3 },
+          0.3,
+        )
+        .fromTo(
+          phraseTwoRef.current,
+          { yPercent: 100, opacity: 0 },
+          { yPercent: 0, opacity: 1, duration: 0.3 },
+          0.4,
+        )
+        .fromTo(
+          logoRef.current,
+          { yPercent: 100, opacity: 0, scale: 0.9 },
+          { yPercent: 0, opacity: 1, scale: 1, duration: 0.4 },
+          0.5,
+        );
+    }, wrapperRef);
+
     return () => ctx.revert();
   }, []);
 
   return (
-    <div
-      ref={mainContainer}
-      className="relative w-full overflow-hidden bg-[#011936]"
-    >
-      {/* Dynamic Header: The Logo that flips color */}
-      <header className="fixed top-0 left-0 w-full z-50 p-8 mix-blend-difference">
-        <img
-          src={logo}
-          alt="Pureminds"
-          className="h-8 md:h-10 object-contain invert"
-        />
-      </header>
+    <section ref={wrapperRef} className="relative w-full h-screen">
+      {/* Video layer */}
+      <video
+        ref={videoRef}
+        className="w-full h-full object-cover"
+        src={heroVideo}
+        autoPlay
+        muted
+        loop
+        playsInline
+      />
+      <div className="absolute inset-0 bg-black/20" />
 
-      {/* Hero A: Fixed Video Section */}
+      {/* Hero B: Overlay that slides up */}
       <div
-        ref={videoSection}
-        className="relative h-screen w-full overflow-hidden"
+        ref={overlayRef}
+        className="absolute inset-0 bg-[#011936] flex flex-col items-center justify-center text-center gap-6"
       >
-        <video
-          ref={videoElement}
-          className="absolute inset-0 w-full h-full object-cover grayscale-[20%]"
-          src={heroVideo}
-          autoPlay
-          muted
-          loop
-          playsInline
-        />
-        <div className="absolute inset-0 bg-[#011936]/30 radial-gradient" />
-      </div>
-
-      {/* Hero B: Sliding Narrative Section */}
-      <div
-        ref={overlaySection}
-        className="absolute top-full left-0 h-screen w-full bg-[#011936] flex flex-col items-center justify-center gap-4 z-20"
-      >
-        <div className="overflow-hidden h-fit">
+        <div className="overflow-hidden">
           <p
-            className="reveal-line translate-y-full text-4xl md:text-6xl text-white font-thin italic antialiased"
+            ref={phraseOneRef}
+            className="text-3xl md:text-5xl text-white/80 italic font-thin"
             style={{ fontFamily: "'Cormorant Garamond', serif" }}
           >
             it all starts
           </p>
         </div>
-        <div className="overflow-hidden h-fit">
+        <div className="overflow-hidden">
           <p
-            className="reveal-line translate-y-full text-4xl md:text-6xl text-white font-thin italic antialiased"
+            ref={phraseTwoRef}
+            className="text-3xl md:text-5xl text-white/80 italic font-thin"
             style={{ fontFamily: "'Cormorant Garamond', serif" }}
           >
             and ends with
           </p>
         </div>
-        <div className="overflow-hidden h-fit mt-4">
+        <div className="overflow-hidden">
           <img
+            ref={logoRef}
             src={logo}
             alt="Pureminds"
-            className="reveal-line translate-y-full h-20 md:h-32 object-contain"
+            className="h-14 md:h-20"
           />
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
