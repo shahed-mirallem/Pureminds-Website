@@ -37,7 +37,12 @@ function Footer() {
         {/* Brand & Awards */}
         <MotionFrame direction="left">
           <div>
-            <h2 className="mb-15 text-3xl font-semibold">pureminds</h2>
+            <h2
+              className="mb-15 text-4xl font-black"
+              style={{ fontFamily: "'Cormorant Garamond', serif" }}
+            >
+              pureminds
+            </h2>
             <p className="mb-6 text-sm">We Win Awards And Get Recognized For</p>
             <div className="mb-15 flex flex-wrap gap-3">
               {awardLogos.map((src, idx) => (
@@ -57,7 +62,12 @@ function Footer() {
         {/* Services */}
         <MotionFrame direction="right">
           <div>
-            <h3 className="mb-4 text-xl font-light uppercase">Our Service</h3>
+            <h3
+              className="mb-4 text-xl font-light uppercase"
+              style={{ fontFamily: "'Cormorant Garamond', serif" }}
+            >
+              Our Service
+            </h3>
             <ul className="space-y-2 text-sm">
               {services &&
                 services.map((svc: any, i: number) => (
@@ -78,7 +88,10 @@ function Footer() {
         <MotionFrame direction="right">
           <div className="flex h-full flex-col justify-between space-y-8">
             <div>
-              <h3 className="mb-4 text-xl font-light uppercase">
+              <h3
+                className="mb-4 text-xl font-light uppercase"
+                style={{ fontFamily: "'Cormorant Garamond', serif" }}
+              >
                 Get In Touch
               </h3>
               <p className="text-sm">123456789</p>
@@ -88,7 +101,12 @@ function Footer() {
             </div>
 
             <div>
-              <h3 className="mb-4 text-xl font-light uppercase">Follow Us</h3>
+              <h3
+                className="mb-4 text-xl font-light uppercase"
+                style={{ fontFamily: "'Cormorant Garamond', serif" }}
+              >
+                Follow Us
+              </h3>
               <div className="flex gap-6 text-2xl">
                 <a
                   href="https://www.facebook.com/puremindsksa"

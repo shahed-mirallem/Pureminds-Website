@@ -136,17 +136,42 @@ const CategoryReveal = () => {
           {/* Dark overlay for readability */}
           <div className="absolute inset-0 bg-[#011936]/40" />
 
-          {/* Title */}
-          <div className="relative z-10 overflow-hidden">
-            <h2
-              className="category-title text-6xl md:text-8xl lg:text-9xl font-black text-white leading-none"
-              style={{
-                fontFamily: "'Helvetica Neue', 'Inter', sans-serif",
-                letterSpacing: "-0.02em",
-              }}
-            >
-              {category.title}
-            </h2>
+          {/* Title and Learn More Button */}
+          <div className="absolute inset-0 flex flex-col items-start justify-between p-12 z-10">
+            {/* Title centered */}
+            <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+              <h2
+                className="category-title text-6xl md:text-8xl lg:text-9xl font-black text-white leading-none"
+                style={{
+                  fontFamily: "'Helvetica Neue', 'Inter', sans-serif",
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                {category.title}
+              </h2>
+            </div>
+
+            {/* Learn More Button - Bottom Right */}
+            <div className="absolute bottom-12 right-12">
+              <button className="group flex items-center gap-3 px-8 py-4 rounded-full bg-white/95 text-[#011936] font-semibold uppercase text-sm tracking-wider hover:bg-white transition-all duration-300 shadow-2xl">
+                Learn more
+                <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <svg
+                    className="w-3 h-3 text-[#011936]"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={3}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </div>
+              </button>
+            </div>
           </div>
         </div>
       ))}
