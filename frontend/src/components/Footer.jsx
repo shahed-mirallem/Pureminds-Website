@@ -6,15 +6,6 @@ import { LuInstagram } from 'react-icons/lu';
 
 import { servicesAtom } from '../atoms/atoms';
 import MotionFrame from './MotionFrame';
-import award1 from '../assets/awards/award1.png';
-import award2 from '../assets/awards/award2.png';
-import award3 from '../assets/awards/award3.png';
-import award4 from '../assets/awards/award4.png';
-import award5 from '../assets/awards/award5.png';
-import award6 from '../assets/awards/award6.png';
-import award7 from '../assets/awards/award7.png';
-import award8 from '../assets/awards/award8.png';
-
 
 function Footer() {
     const awardLogos = [award1, award2, award3, award4, award5, award6, award7, award8];

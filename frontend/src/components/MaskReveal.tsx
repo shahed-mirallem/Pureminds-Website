@@ -4,14 +4,20 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function MaskReveal() {
-  const sectionRef = useRef(null);
-  const itemsRef = useRef([]);
+interface MaskItem {
+  title: string;
+  description: string;
+}
+
+const MaskReveal = () => {
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const itemsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      // Staggered reveal of items with mask effect
       itemsRef.current.forEach((item) => {
+        if (!item) return;
+
         gsap.from(item, {
           clipPath: 'inset(0 100% 0 0)',
           duration: 1.5,
@@ -24,8 +30,7 @@ export default function MaskReveal() {
           },
         });
 
-        // Text animation
-        const text = item.querySelector('.mask-text');
+        const text = item.querySelector('.mask-text') as HTMLElement | null;
         if (text) {
           gsap.from(text, {
             opacity: 0,
@@ -45,7 +50,7 @@ export default function MaskReveal() {
     return () => ctx.revert();
   }, []);
 
-  const items = [
+  const items: MaskItem[] = [
     {
       title: 'Creative Strategy',
       description: 'Purposeful design that resonates with your audience',
@@ -99,4 +104,6 @@ export default function MaskReveal() {
       </div>
     </section>
   );
-}
+};
+
+export default MaskReveal;

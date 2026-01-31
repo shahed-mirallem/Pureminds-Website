@@ -1,18 +1,17 @@
-import { useRef, useLayoutEffect } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function Hero() {
-  const heroRef = useRef(null);
-  const titleRef = useRef(null);
-  const subtitleRef = useRef(null);
-  const maskRefs = useRef([]);
+const Hero = () => {
+  const heroRef = useRef<HTMLDivElement | null>(null);
+  const titleRef = useRef<HTMLHeadingElement | null>(null);
+  const subtitleRef = useRef<HTMLParagraphElement | null>(null);
+  const maskRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      // Staggered mask reveal animation
       gsap.from(maskRefs.current, {
         scaleX: 0,
         transformOrigin: 'left center',
@@ -24,11 +23,9 @@ export default function Hero() {
           start: 'top center',
           end: 'bottom center',
           scrub: 1,
-          markers: false,
         },
       });
 
-      // Title animation
       gsap.from(titleRef.current, {
         opacity: 0,
         y: 100,
@@ -41,7 +38,6 @@ export default function Hero() {
         },
       });
 
-      // Subtitle animation
       gsap.from(subtitleRef.current, {
         opacity: 0,
         y: 50,
@@ -63,7 +59,6 @@ export default function Hero() {
       ref={heroRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black"
     >
-      {/* Background mask reveals */}
       <div className="absolute inset-0 flex">
         {[...Array(5)].map((_, i) => (
           <div
@@ -75,7 +70,6 @@ export default function Hero() {
         ))}
       </div>
 
-      {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-6xl mx-auto">
         <h1
           ref={titleRef}
@@ -94,4 +88,6 @@ export default function Hero() {
       </div>
     </section>
   );
-}
+};
+
+export default Hero;

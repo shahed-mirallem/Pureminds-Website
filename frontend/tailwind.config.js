@@ -6,8 +6,15 @@ export default {
   ],
   theme: {
     extend: {
+      colors: {
+        pure: {
+          deep: '#011936',
+          electric: '#0055FF',
+        },
+      },
       fontFamily: {
-        'serif-thin': ['Cormorant Garamond', 'serif'],
+        'serif-thin': ['"Cormorant Garamond"', 'serif'],
+        'sans-heavy': ['"Helvetica Neue"', '"Inter"', '"SF Pro Display"', '"Segoe UI"', 'sans-serif'],
       },
       fontWeight: {
         'ultra-thin': '100',
