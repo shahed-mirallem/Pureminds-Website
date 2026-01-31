@@ -72,6 +72,15 @@ const HeroCinematic = () => {
           playsInline
         />
         <div className="absolute inset-0 bg-black/40" />
+
+        {/* Logo in center of video */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <img
+            src={logoWhite}
+            alt="Pureminds"
+            className="h-24 md:h-32 lg:h-40 object-contain"
+          />
+        </div>
       </div>
 
       {/* Hero B: القسم الأزرق */}

@@ -1,15 +1,36 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import award1 from "../assets/awards/award1.png";
-import award2 from "../assets/awards/award2.png";
-import award3 from "../assets/awards/award3.png";
-import award4 from "../assets/awards/award4.png";
-import award5 from "../assets/awards/award5.png";
-import award6 from "../assets/awards/award6.png";
-import award7 from "../assets/awards/award7.png";
-import award8 from "../assets/awards/award8.png";
+import cert1 from "../assets/certifications/1.jpeg";
+import cert2 from "../assets/certifications/2.jpeg";
+import cert3 from "../assets/certifications/3.jpeg";
+import cert4 from "../assets/certifications/4.jpeg";
+import cert5 from "../assets/certifications/5.jpeg";
+import cert6 from "../assets/certifications/6.jpeg";
+import cert7 from "../assets/certifications/7.jpeg";
+import cert8 from "../assets/certifications/8.jpeg";
+import cert9 from "../assets/certifications/9.jpeg";
+import cert10 from "../assets/certifications/10.jpeg";
+import cert11 from "../assets/certifications/11.jpeg";
+import cert12 from "../assets/certifications/12.jpeg";
+import cert13 from "../assets/certifications/13.jpeg";
+import cert14 from "../assets/certifications/14.jpeg";
 
-const awards = [award1, award2, award3, award4, award5, award6, award7, award8];
+const certifications = [
+  cert1,
+  cert2,
+  cert3,
+  cert4,
+  cert5,
+  cert6,
+  cert7,
+  cert8,
+  cert9,
+  cert10,
+  cert11,
+  cert12,
+  cert13,
+  cert14,
+];
 
 const CertificateCarousel = () => {
   const trackRef = useRef<HTMLDivElement | null>(null);
@@ -19,73 +40,109 @@ const CertificateCarousel = () => {
     const track = trackRef.current;
     if (!track) return;
 
-    // Infinite auto-scrolling loop
+    // Set initial position
+    gsap.set(track, { xPercent: 0 });
+
+    // Seamless circular infinite loop
     tweenRef.current = gsap.to(track, {
       xPercent: -50,
-      ease: "none",
+      ease: "linear",
       repeat: -1,
-      duration: 30,
+      duration: 20,
+      modifiers: {
+        xPercent: gsap.utils.wrap(-50, 0),
+      },
     });
 
-    // 1.1x hover zoom
+    // Hover effects with scale
     const cards = track.querySelectorAll(".certificate-card");
 
     const handleMouseEnter = (card: Element) => {
-      tweenRef.current?.pause();
-      gsap.to(card, {
-        scale: 1.1,
-        duration: 0.3,
-        ease: "power2.out",
-      });
+      if (tweenRef.current) {
+        tweenRef.current.pause();
+      }
     };
 
     const handleMouseLeave = (card: Element) => {
-      tweenRef.current?.resume();
-      gsap.to(card, {
-        scale: 1,
-        duration: 0.3,
-        ease: "power2.out",
-      });
+      if (tweenRef.current) {
+        tweenRef.current.resume();
+      }
     };
 
     cards.forEach((card) => {
-      card.addEventListener("mouseenter", () => handleMouseEnter(card));
-      card.addEventListener("mouseleave", () => handleMouseLeave(card));
+      const enterHandler = () => handleMouseEnter(card);
+      const leaveHandler = () => handleMouseLeave(card);
+      card.addEventListener("mouseenter", enterHandler);
+      card.addEventListener("mouseleave", leaveHandler);
+
+      // Store handlers for cleanup
+      (card as any)._enterHandler = enterHandler;
+      (card as any)._leaveHandler = leaveHandler;
     });
 
     return () => {
-      tweenRef.current?.kill();
+      if (tweenRef.current) {
+        tweenRef.current.kill();
+      }
       cards.forEach((card) => {
-        card.removeEventListener("mouseenter", () => handleMouseEnter(card));
-        card.removeEventListener("mouseleave", () => handleMouseLeave(card));
+        const enterHandler = (card as any)._enterHandler;
+        const leaveHandler = (card as any)._leaveHandler;
+        if (enterHandler) card.removeEventListener("mouseenter", enterHandler);
+        if (leaveHandler) card.removeEventListener("mouseleave", leaveHandler);
       });
     };
   }, []);
 
   return (
-    <section className="relative py-24 bg-[#011936] overflow-hidden">
-      <div className="max-w-6xl mx-auto px-6 mb-12">
-        <h3 className="text-4xl md:text-5xl font-black text-white">
-          Our Certifications
-        </h3>
+    <section className="relative py-32 bg-gradient-to-b from-[#011936] to-[#012a52] overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-300 rounded-full blur-3xl"></div>
       </div>
+
+      <div className="relative max-w-7xl mx-auto px-6 mb-16">
+        <div className="text-center space-y-4">
+          <h2 className="text-5xl md:text-7xl font-black text-white tracking-tight">
+            Our Certifications
+          </h2>
+          <p className="text-xl md:text-2xl text-blue-200 max-w-3xl mx-auto">
+            Trusted expertise backed by industry-leading certifications
+          </p>
+        </div>
+      </div>
+
+      {/* Carousel wrapper */}
       <div className="relative w-full overflow-hidden">
+        {/* Gradient masks for smooth edges */}
+        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#012a52] to-transparent z-10 pointer-events-none"></div>
+        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#012a52] to-transparent z-10 pointer-events-none"></div>
+
         <div
           ref={trackRef}
-          className="flex gap-8 w-[200%]"
+          className="flex gap-8 w-[200%] px-8"
           style={{ willChange: "transform" }}
         >
-          {[...awards, ...awards].map((src, idx) => (
+          {[...certifications, ...certifications].map((src, idx) => (
             <div
               key={`${src}-${idx}`}
-              className="certificate-card shrink-0 bg-white rounded-lg p-6 shadow-lg"
-              style={{ width: "200px", height: "260px" }}
+              className="certificate-card shrink-0 group relative cursor-pointer"
+              style={{ width: "340px", height: "440px" }}
             >
-              <img
-                src={src}
-                alt={`Certificate ${idx + 1}`}
-                className="h-full w-full object-contain"
-              />
+              {/* Card with transparent background */}
+              <div className="relative h-full bg-transparent rounded-2xl overflow-hidden transition-all duration-400 group-hover:scale-105">
+                {/* Certificate image */}
+                <div className="relative h-full p-4 flex items-center justify-center">
+                  <img
+                    src={src}
+                    alt={`Professional Certificate ${(idx % certifications.length) + 1}`}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+
+                {/* Shine effect on hover */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/0 to-transparent group-hover:via-white/10 transition-all duration-700 transform -translate-x-full group-hover:translate-x-full"></div>
+              </div>
             </div>
           ))}
         </div>
