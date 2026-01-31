@@ -4,6 +4,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import Header from "./components/Header";
 import HeroCinematic from "./components/HeroCinematic";
+import ServicesSection from "./components/ServicesSection";
 import CategoryReveal from "./components/CategoryReveal";
 import CertificateCarousel from "./components/CertificateCarousel";
 import Footer from "./components/Footer";
@@ -52,6 +53,22 @@ const App = () => {
       <Header />
       <main>
         <HeroCinematic />
+        <ServicesSection
+          intro="Welcome to PureMinds, a leading media production company dedicated to creating captivating visual experiences."
+          heading="Our Service"
+          primary={[
+            { title: "Exhibition & Event", color: "bg-[#0598DC]" },
+            { title: "Advertising Campaigns", color: "bg-[#9D7BFF]" },
+          ]}
+          secondary={[
+            { text: "Film Production", color: "bg-[#0598DC]" },
+            { text: "Creative Solutions", color: "bg-[#E95C58]" },
+            { text: "Event & Entertainment", color: "bg-[#41C47A]" },
+            { text: "Brand Identity", color: "bg-[#F5C96B]" },
+            { text: "Strategies & Consulting", color: "bg-[#B68CF5]" },
+            { text: "Digital Marketing", color: "bg-[#0C1E3E]" },
+          ]}
+        />
         <CategoryReveal />
         <CertificateCarousel />
       </main>

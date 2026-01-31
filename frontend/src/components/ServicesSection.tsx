@@ -1,6 +1,6 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { FC, useLayoutEffect, useRef } from "react";
+import { type FC, useLayoutEffect, useRef } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -149,6 +149,7 @@ const ServicesSection: FC<ServicesSectionProps> = ({
   return (
     <section
       ref={sectionRef}
+      data-header-theme="light"
       className="pointer-events-auto min-h-screen w-full bg-white flex items-center"
     >
       <div className="w-full max-w-6xl mx-auto px-6 md:px-12 lg:px-20 py-16">
