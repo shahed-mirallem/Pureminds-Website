@@ -2,111 +2,90 @@ import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import heroVideo from "../assets/demo_video.mp4";
-import logo from "../assets/pureminds-logo.png";
+import logoWhite from "../assets/pureminds-logo.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const HeroCinematic = () => {
   const wrapperRef = useRef<HTMLElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const overlayRef = useRef<HTMLDivElement | null>(null);
-  const phraseOneRef = useRef<HTMLParagraphElement | null>(null);
-  const phraseTwoRef = useRef<HTMLParagraphElement | null>(null);
-  const logoRef = useRef<HTMLImageElement | null>(null);
+  const heroBRef = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      // Hero A: Scale video from 1.1 to 1.0 on mount
-      gsap.fromTo(
-        videoRef.current,
-        { scale: 1.1 },
-        { scale: 1, duration: 1.5, ease: "power2.out" },
-      );
+      // 1. حركة دخول الفيديو الأولية
+      gsap.fromTo(videoRef.current, { scale: 1.05 }, { scale: 1, duration: 1.5, ease: "power2.out" });
 
-      // Pin and transition timeline - UNPINS after transition
+      // 2. التايم لاين الرئيسي - قصرنا المسافة لـ 250% لسرعة الاستجابة
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: wrapperRef.current,
           start: "top top",
-          end: "+=200%",
-          scrub: 1,
+          end: "+=250%", // مسافة موزونة: مو طويلة كتير ولا قصيرة بتخطف الحركة
+          scrub: 0.8,    // تقليل الرقم لزيادة سرعة استجابة الكلام للماوس
           pin: true,
         },
       });
 
-      // Hero B slides up
-      tl.fromTo(
-        overlayRef.current,
-        { yPercent: 100 },
-        { yPercent: 0, duration: 1, ease: "none" },
-      )
-        .fromTo(
-          phraseOneRef.current,
-          { yPercent: 100, opacity: 0 },
-          { yPercent: 0, opacity: 1, duration: 0.3 },
-          0.3,
-        )
-        .fromTo(
-          phraseTwoRef.current,
-          { yPercent: 100, opacity: 0 },
-          { yPercent: 0, opacity: 1, duration: 0.3 },
-          0.4,
-        )
-        .fromTo(
-          logoRef.current,
-          { yPercent: 100, opacity: 0, scale: 0.9 },
-          { yPercent: 0, opacity: 1, scale: 1, duration: 0.4 },
-          0.5,
-        );
-    }, wrapperRef);
+      // الخطوة 1: الخلفية الزرقاء تغطي الشاشة
+      tl.to(heroBRef.current, { yPercent: -100, ease: "none" })
+      
+      // الخطوة 2: وقفة قصيرة جداً (ثبات) بعد ما تظهر الخلفية
+      .to({}, { duration: 0.2 }) 
 
+      // الخطوة 3: الجملة الأولى تظهر (بمجرد أول حركة ماوس بعد الثبات)
+      .fromTo(".phrase-1", 
+        { y: 30, opacity: 0 }, 
+        { y: 0, opacity: 1, duration: 1, ease: "power2.out" }
+      )
+
+      // الخطوة 4: الجملة الثانية تظهر مباشرة بعد الأولى مع السكرول المستمر
+      .fromTo(".phrase-2", 
+        { y: 30, opacity: 0 }, 
+        { y: 0, opacity: 1, duration: 1, ease: "power2.out" },
+        "+=0.2" // تأخير بسيط جداً لتبين إنها حركة منفصلة
+      );
+
+    }, wrapperRef);
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={wrapperRef} className="relative w-full h-screen">
-      {/* Video layer */}
-      <video
-        ref={videoRef}
-        className="w-full h-full object-cover"
-        src={heroVideo}
-        autoPlay
-        muted
-        loop
-        playsInline
-      />
-      <div className="absolute inset-0 bg-black/20" />
+    <section ref={wrapperRef} className="relative w-full h-screen overflow-hidden bg-[#011936]">
+      
+      {/* Hero A: الفيديو */}
+      <div className="absolute inset-0 w-full h-screen">
+        <video ref={videoRef} className="w-full h-full object-cover" src={heroVideo} autoPlay muted loop playsInline />
+        <div className="absolute inset-0 bg-black/40" />
+      </div>
 
-      {/* Hero B: Overlay that slides up */}
-      <div
-        ref={overlayRef}
-        className="absolute inset-0 bg-[#011936] flex flex-col items-center justify-center text-center gap-6"
-      >
-        <div className="overflow-hidden">
-          <p
-            ref={phraseOneRef}
-            className="text-3xl md:text-5xl text-white/80 italic font-thin"
-            style={{ fontFamily: "'Cormorant Garamond', serif" }}
-          >
-            it all starts
-          </p>
-        </div>
-        <div className="overflow-hidden">
-          <p
-            ref={phraseTwoRef}
-            className="text-3xl md:text-5xl text-white/80 italic font-thin"
-            style={{ fontFamily: "'Cormorant Garamond', serif" }}
-          >
-            and ends with
-          </p>
-        </div>
-        <div className="overflow-hidden">
-          <img
-            ref={logoRef}
-            src={logo}
-            alt="Pureminds"
-            className="h-14 md:h-20"
-          />
+      {/* Hero B: القسم الأزرق */}
+      <div ref={heroBRef} className="absolute top-full left-0 w-full h-screen bg-[#011936] px-12 md:px-24 z-20">
+        <div className="relative z-30 flex flex-col justify-center h-full max-w-5xl">
+          <div className="space-y-6">
+            
+            {/* الجملة الأولى */}
+            <div className="overflow-hidden">
+              <h2 className="phrase-1 text-5xl md:text-8xl text-white font-thin italic antialiased leading-tight" 
+                  style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+                it all starts
+              </h2>
+            </div>
+            
+            {/* الجملة الثانية */}
+            <div className="overflow-hidden">
+              <h2 className="phrase-2 text-5xl md:text-8xl text-white font-thin italic antialiased leading-tight"
+                  style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+                and ends with
+              </h2>
+            </div>
+
+            {/* اللوجو الثابت أسفل الجمل */}
+            <div className="pt-10">
+               <img src={logoWhite} alt="Pureminds" className="h-14 md:h-20 object-contain" />
+            </div>
+
+          </div>
         </div>
       </div>
     </section>
